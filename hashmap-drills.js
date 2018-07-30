@@ -142,7 +142,7 @@ const palindrome = string => {
     console.log(true);
   }
 };
-palindrome('ddaaddf');
+palindrome('ddafadd');
 
 // tree = false, not a palindrome
 // t: 1
@@ -158,3 +158,68 @@ palindrome('ddaaddf');
 
 // to determine palindrome - get count of each character in string
 // 1 count can be odd, the rest needs to be even
+
+// Anagrams:
+// e: 1
+// a: 2
+// t: 3
+// s: 4
+// c: 5
+// r: 6
+
+// east = 1243 = 10;
+// teas = 10;
+// acre = 2 5 6 1 = 14;
+// care = 14;
+
+const myArr = ['east', 'cars', 'acre', 'arcs', 'teas', 'eats', 'race'];
+const anagram = arr => {
+  const hashMap = new Map();
+  let id = 0;
+  for (let i = 0; i < arr.length; i++) {
+    let word = arr[i];
+    for (let j = 0; j < word.length; j++) {
+      hashMap.set(word[j]);
+    }
+  }
+
+  hashMap.forEach((value, key) => {
+    value = id++;
+    hashMap.set(key, value * 2);
+  });
+
+  let groupedAnagrams = [];
+  let anagrams = [];
+  let newHashMap = new Map();
+
+  for (let i = 0; i < arr.length; i++) {
+    let word = arr[i];
+    let wordTotal = 0;
+
+    for (let j = 0; j < word.length; j++) {
+      wordTotal += hashMap.get(word[j]);
+    }
+    newHashMap.set(word, wordTotal);
+    
+    if (newHashMap.get(word) === wordTotal) {
+      anagrams = [...anagrams, [word]];
+    }
+  }
+
+  // newHashMap.forEach((value, key) => {
+  //   if (newHashMap.get(key) === value) {
+  //     anagrams.push(key);
+  //   }
+  // });
+
+  console.log(newHashMap);
+}; 
+
+anagram(myArr);
+
+// e: 0
+// a: 2
+// s: 4
+// t: 6
+// c: 8
+// r: 10
