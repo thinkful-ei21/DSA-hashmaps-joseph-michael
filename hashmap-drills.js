@@ -5,16 +5,15 @@ class HashMap {
     this.length = 0;
     this._slots = [];
     this._capacity = initialCapacity;
+    this._deleted = 0;
   }
-  static _hashString(string) {
-    let hash = 5381;
-    for (let i = 0; i < string.length; i++) {
-      hash = (hash << 5) + hash + string.charCodeAt(i); // "<<" left-shifts (bitwise) binary
-      hash = hash & hash; // will transform integer to 32-bit (bitwise operator)
+
+  get(key) {
+    const index = this._findSlot(key);
+    if (this._slots[index] === undefined) {
+      throw new Error('Key error');
     }
-    console.log(hash >>> 0);
-    return hash >>> 0; // hash is gonna return an integer between 0 and this._capacity
-    // if resulting hash is negative, will convert to positive
+    return this._slots[index].value;
   }
 
   set(key, value) { // set(key = 'Michael', value = 'true')
@@ -26,9 +25,23 @@ class HashMap {
     const index = this._findSlot(key); // this_findSlot(key) is 
     this._slots[index] = {
       key,
-      value
+      value,
+      deleted: false
     };
-    this.length++;
+    if (!this._slots[index]) {
+      this.length++;
+    }
+  }
+
+  remove(key) {
+    const index = this._findSlot(key);
+    const slot = this._slots[index];
+    if (slot === undefined) {
+      throw new Error('Key error');
+    }
+    slot.deleted = true;
+    this.length--;
+    this._deleted++;
   }
 
   _findSlot(key) {
@@ -44,6 +57,30 @@ class HashMap {
     }
   }
 
+  _resize(size) {
+    const oldSlots = this._slots;
+    this._capacity = size;
+    // Reset the length - it will get rebuilt as you add the items back
+    this.length = 0;
+    this._deleted = 0;
+    this._slots = [];
+
+    for (const slot of oldSlots) {
+      if (slot !== undefined && !slot.deleted) {
+        this.set(slot.key, slot.value);
+      }
+    }
+  }
+
+  static _hashString(string) {
+    let hash = 5381;
+    for (let i = 0; i < string.length; i++) {
+      hash = (hash << 5) + hash + string.charCodeAt(i); // "<<" left-shifts (bitwise) binary
+      hash = hash & hash; // will transform integer to 32-bit (bitwise operator)
+    }
+    return hash >>> 0; // hash is gonna return an integer between 0 and this._capacity
+    // if resulting hash is negative, will convert to positive
+  }
 }
 
 HashMap.MAX_LOAD_RATIO = 0.9;
