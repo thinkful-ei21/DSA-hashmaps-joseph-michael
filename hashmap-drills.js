@@ -108,8 +108,53 @@ lor.set('Ent', 'Treebeard');
 
 // console.log(lor.get('Ent'));
 
+const lotr = new Map();
+
+lotr.set('Hobbit', 'Bilbo');
+lotr.set('Wizard', 'Frodo');
+lotr.set('Goblin', 'Brodo');
+lotr.set('Evil Thing', 'Filbo');
 
 
+// console.log(lotr);
 
+const palindrome = string => {
+  const hashMap = new Map();
+  let oddCount = 0;
 
+  for (let i = 0; i < string.length; i++) { // iterate through string
+    let letterCount = 1;
+    if (hashMap.has(string[i])) {
+      letterCount++;
+    }
+    hashMap.set(string[i], letterCount); // input item into hashMap
+  }
 
+  hashMap.forEach(value => {
+    if (value % 2 === 1) {
+      oddCount++;
+    }
+  });
+
+  if (oddCount > 1) {
+    console.log(false);
+  } else {
+    console.log(true);
+  }
+};
+palindrome('ddaaddf');
+
+// tree = false, not a palindrome
+// t: 1
+// r: 1
+// e: 2
+
+// racecar = true
+// r: 2
+// a: 2
+// c: 2
+// e: 1
+// acecarr = true
+
+// to determine palindrome - get count of each character in string
+// 1 count can be odd, the rest needs to be even
