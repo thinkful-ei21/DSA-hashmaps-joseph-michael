@@ -23,14 +23,17 @@ class HashMap {
     }
 
     const index = this._findSlot(key); // this_findSlot(key) is 
+    
+    if (!this._slots[index]) {
+      this.length++;
+    }
+
     this._slots[index] = {
       key,
       value,
       deleted: false
     };
-    if (!this._slots[index]) {
-      this.length++;
-    }
+
   }
 
   remove(key) {
@@ -86,7 +89,27 @@ class HashMap {
 HashMap.MAX_LOAD_RATIO = 0.9;
 HashMap.SIZE_RATIO = 3;
 
-const test = () => {
-  HashMap._hashString('joseph');
-};
-test();
+
+const lor = new HashMap();
+
+lor.set('Hobbit', 'Bilbo');
+lor.set('Hobbit', 'Frodo');
+lor.set('Wizard', 'Gandalf');
+lor.set('Human', 'Aragon');
+lor.set('Elf', 'Legolas');
+lor.set('Maiar', 'The Necromancer');
+lor.set('Maiar', 'Sauron');
+lor.set('RingBearer', 'Gollum');
+lor.set('LadyOfLight', 'Galadriel');
+lor.set('HalfElven', 'Arwen');
+lor.set('Ent', 'Treebeard');
+
+// console.log(lor);
+
+// console.log(lor.get('Ent'));
+
+
+
+
+
+
